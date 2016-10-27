@@ -12,7 +12,7 @@ class FiguresController < ApplicationController
     @figure = Figure.create(params["figure"])
 
     if params["title"]["name"]!= ""
-      @figure.titles << Title.create(name: params["title"]["name"])
+      @figure.titles << Title.create(params["title"])
     end
 
     if params["landmark"]["name"] != ""
@@ -26,7 +26,7 @@ class FiguresController < ApplicationController
   end
 
   get '/figures/:id' do
-    @figure = Figure.find(params["id"].to_i)
+    @figure = Figure.find(params["id"])
     erb :'figures/show'
   end
 
@@ -41,13 +41,11 @@ class FiguresController < ApplicationController
     @figure.update(params["figure"])
 
     if params["title"]["name"]!= ""
-      @figure.titles << Title.create(params["title"]["name"])
+      @figure.titles << Title.create(params["title"])
     end
 
-    if params["landmark"]["name"] != "" && params["landmark"]["year_completed"] != ""
-      @landmark = Landmark.create
-      @landmark.name = params["landmark"]["name"]
-      @landmark.year_completed = ["landmark"]["year_completed"].join.to_i
+    if params["landmark"]["name"] != ""
+      @landmark = Landmark.create(params["landmark"])
       @figure.landmarks << @landmark
     end
 
